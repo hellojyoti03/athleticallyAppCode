@@ -1,0 +1,7 @@
+
+
+
+1. build android
+cd android
+./gradlew assembleDebug
+./gradlew assembleRelease
