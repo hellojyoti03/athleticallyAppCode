@@ -102,6 +102,7 @@ const DashboardPage = ({route}) => {
                   width: '85%',
                   borderRadius: 2,
                   marginTop: 5,
+                  // backgroundColor: 'red',
                 }}></ShimmerPlaceholder>
             </View>
 

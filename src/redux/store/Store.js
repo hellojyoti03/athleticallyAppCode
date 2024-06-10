@@ -8,6 +8,6 @@ const store = configureStore({
   },
 });
 store.subscribe(() => {
-  console.log('Store updated:', store.getState());
+  // console.log('Store updated:', store.getState());
 });
 export default store;

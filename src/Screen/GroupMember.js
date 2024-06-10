@@ -17,10 +17,11 @@ import {
 } from 'react-native-responsive-dimensions';
 import {SliderBox} from 'react-native-image-slider-box';
 import Notificationss from 'react-native-vector-icons/MaterialIcons';
-import {getUserGroupsConnect} from '../_request';
+import {getUserGroupsConnect, getUsersByGroupId} from '../_request';
 import {setContactGroup} from '../redux/slice/appSclice';
 import {useNavigation} from '@react-navigation/native';
-const Connect = () => {
+const Connect = ({route}) => {
+  const {group} = route.params;
   const dispatch = useDispatch();
   const appState = useSelector(state => state.app);
   const navigation = useNavigation();
@@ -38,24 +39,31 @@ const Connect = () => {
     try {
       setLoading(true);
 
-      let response = await getUserGroupsConnect(
-        appState.userToken,
-        appState.currentUser.user_id,
-      );
-      console.log(response.data.data, 'GROUP CHAT RESPONSE');
+      let response = await getUsersByGroupId(appState.userToken, group.groupId);
+      console.log(response.data.data, 'GROUP MEMEBR RESPONSE');
 
-      let filterUserGroups = response.data.data.map(el => {
+      let filterUser = response.data.data.map(el => {
         return {
-          name: el.group_name,
+          name: el.userdtls.name,
+          profile: el.userdtls.image,
           color: '#5855d6',
           textColor: '#fff',
-          userCount: el.usercount,
-          groupId: el.group_id,
         };
       });
+      // let filterUserGroups = response.data.data.map(el => {
+      //   return {
+      //     name: el.group_name,
+      //     color: '#5855d6',
+      //     textColor: '#fff',
+      //     userCount: el.usercount,
+      //     groupId: el.group_id,
+      //   };
+      // });
 
-      console.log(filterUserGroups, 'GROUPS');
-      dispatch(setContactGroup(filterUserGroups));
+      // console.log(filterUserGroups, 'GROUPS');
+      // dispatch(setContactGroup(filterUserGroups));
+      console.log(filterUser, 'f');
+      setUserList(filterUser);
       setLoading(false);
     } catch (error) {
       if (error?.response) {
@@ -108,14 +116,14 @@ const Connect = () => {
         </View>
       </View>
 
-      <SliderBox
+      {/* <SliderBox
         images={images}
         imageLoadingColor="#F29D38"
         dotColor="#F29D38"
         resizeMethod={'resize'}
         resizeMode={'contain'}
         ImageComponentStyle={{borderRadius: 15, width: '96%', marginTop: 5}}
-      />
+      /> */}
 
       <View style={styles.content}>
         <ScrollView style={styles.scrollView}>
@@ -123,7 +131,7 @@ const Connect = () => {
             <ActivityIndicator size="large" color="#F29D38" />
           ) : (
             <>
-              {appState.contactGroup.map((user, index) => (
+              {userList.map((user, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
@@ -132,15 +140,9 @@ const Connect = () => {
                       backgroundColor: user.color,
                       marginTop: index === 0 ? 0 : 10,
                     },
-                  ]}
-                  onPress={() =>
-                    navigation.navigate('GroupChat', {group: user})
-                  }>
+                  ]}>
                   <View style={styles.imageContainer}>
-                    <Image
-                      source={require('../assets/user.jpg')}
-                      style={styles.image}
-                    />
+                    <Image source={{uri: user.profile}} style={styles.image} />
                   </View>
                   <View style={styles.textContainer}>
                     <Text style={{color: user.textColor}}>{user.name}</Text>

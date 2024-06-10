@@ -18,7 +18,7 @@ const setAuthorizationHeader = async token => {
 const setAsyncStorage = async ({token, email, password, user}) => {
   try {
     await Promise.all([
-      AsyncStorage.setItem('usertoken', JSON.stringify(token)),
+      AsyncStorage.setItem('usertoken', JSON.stringify(user)),
       AsyncStorage.setItem('athletically_token', JSON.stringify(token)),
       AsyncStorage.setItem('athletically_email', JSON.stringify(email)),
       AsyncStorage.setItem('athletically_password', JSON.stringify(password)),
@@ -77,7 +77,7 @@ const autoLogin = async () => {
       token: response.data.data.token,
       email,
       password,
-      user,
+      user: response.data.data,
     });
     await setAuthorizationHeader(response.data.data.token);
     return true;

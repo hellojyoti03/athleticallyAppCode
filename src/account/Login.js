@@ -9,6 +9,7 @@ import {
   Modal,
   Dimensions,
   StatusBar,
+  ToastAndroid,
   ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
@@ -39,32 +40,49 @@ const Login = () => {
   const [password, setpassword] = useState('');
   const [statusBarStyle, setStatusBarStyle] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-  const [erroremail, seterroremail] = useState(false);
-  const [errorpass, seterrorpass] = useState(false);
+  const [erroremail, seterroremail] = useState('');
+  const [errorpass, seterrorpass] = useState('');
   const [load, setload] = useState(false);
-  const [error, seterror] = useState('');
+
   const [data, setdata] = useState(true);
 
   const handleSubmit = async () => {
-    if (!email) {
-      // setload(false)
-      seterroremail(true);
-    } else {
-      seterroremail('');
-    }
-
-    if (!password) {
-      seterrorpass(true);
-    } else {
-      seterrorpass('');
-    }
-    try {
-      if (!email && !password) {
-        setload(false);
-      } else {
-        setload(true);
+    if (!email || !password) {
+      if (!email) {
+        console.log('Email is not defined');
+        // Handle missing email
+        Toast('Email cannot to be empty');
+        return;
+      }
+      if (!password) {
+        console.log('Password is not defined');
+        // Handle missing password
+        Toast('Password cannot to be empty');
+        return;
       }
 
+      return;
+    }
+    // if (!email) {
+    //   // setload(false)
+    //   seterroremail(true);
+    // } else {
+    //   seterroremail(false);
+    // }
+
+    // if (!password) {
+    //   seterrorpass(true);
+    // } else {
+    //   seterrorpass(false);
+    // }
+    try {
+      // if (!email && !password) {
+      //   setload(false);
+      // } else {
+      //   setload(true);
+      //}
+
+      setload(true);
       const res = await logIn(email, password);
       console.log(res.data.data);
       dispatch(setUserToken(res.data.data.token));
@@ -89,14 +107,17 @@ const Login = () => {
       if (error?.response) {
         console.error('Server responded with an error:', error.response.data);
         if (error.response.data.err == true) {
-          seterror(error.response.data.message);
-          setload(false);
+          //seterror(error.response.data.message);
+          Toast(error.response.data.message);
         }
       } else if (error?.request) {
         console.error('No response received:', error.request);
+        Toast('Invalid Log in !!');
       } else {
         console.error('Error setting up the request:', error.message);
+        Toast('Invalid Log in !!');
       }
+      setload(false);
 
       console.log(error);
     }
@@ -146,6 +167,16 @@ const Login = () => {
     navigation.navigate('Registration');
     setemail('');
     setpassword('');
+  };
+
+  const Toast = message => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
   };
 
   return (
@@ -230,19 +261,17 @@ const Login = () => {
                 borderRadius: 10,
               }}
             />
-            {erroremail && erroremail ? (
+            {/* {erroremail && erroremail ? (
               <Text
                 style={{
                   color: 'red',
                   fontSize: responsiveFontSize(1.5),
                   paddingLeft: 0,
                   paddingTop: 5,
-                }}>
-                Email is not allowed to be empty
-              </Text>
+                }}></Text>
             ) : (
               ''
-            )}
+            )} */}
           </View>
         </View>
 
@@ -303,7 +332,7 @@ const Login = () => {
             </View>
           </View>
 
-          {errorpass && errorpass ? (
+          {/* {errorpass && errorpass ? (
             <Text
               style={{
                 color: 'red',
@@ -315,7 +344,7 @@ const Login = () => {
             </Text>
           ) : (
             ''
-          )}
+          )} */}
         </View>
 
         {/* login */}

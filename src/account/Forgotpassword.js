@@ -86,7 +86,7 @@ const Forgotpassword = () => {
       const res = await forgotPasswordVerifyOtp(email, verifyotp);
       setverifyload(false);
 
-      setsaveverifyotpresponse(res.data.message);
+      setsaveverifyotpresponse(res);
       setverifyotp('');
       Toast('  OTP verify successfully !!');
       setotperror('');
@@ -135,9 +135,9 @@ const Forgotpassword = () => {
     }
   };
 
-  const Toast = () => {
+  const Toast = message => {
     ToastAndroid.showWithGravityAndOffset(
-      '  OTP send successfully !!',
+      message,
       ToastAndroid.LONG,
       ToastAndroid.BOTTOM,
       25,

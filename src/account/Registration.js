@@ -9,18 +9,22 @@ import {
   Dimensions,
   StatusBar,
   ToastAndroid,
-  ActivityIndicator
-} from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native';
+  ActivityIndicator,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {
   responsiveHeight,
   responsiveWidth,
-  responsiveFontSize
-} from "react-native-responsive-dimensions";
-import axios from 'axios'
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import axios from 'axios';
 import LottieView from 'lottie-react-native';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import Icon from 'react-native-vector-icons/Feather';
@@ -29,15 +33,15 @@ const Registration = () => {
   const navigation = useNavigation();
   const [statusBarStyle, setStatusBarStyle] = useState();
   const [data1, setdata1] = useState(true);
-  const [name, setname] = useState('')
-  const [password, setpassword] = useState('')
-  const [cpassword, setcpassword] = useState('')
-  const [email, setemail] = useState('')
-  const [errormsg, seterrormsg] = useState(false)
-  const [errorpass, seterrorpass] = useState(false)
-  const [erroremail, seterroremail] = useState(false)
-  const [errname, seterrname] = useState(false)
-  const [load, setload] = useState(false)
+  const [name, setname] = useState('');
+  const [password, setpassword] = useState('');
+  const [cpassword, setcpassword] = useState('');
+  const [email, setemail] = useState('');
+  const [errormsg, seterrormsg] = useState(false);
+  const [errorpass, seterrorpass] = useState(false);
+  const [erroremail, seterroremail] = useState(false);
+  const [errname, seterrname] = useState(false);
+  const [load, setload] = useState(false);
   const [error, setError] = useState('');
   const handleSubmit = async () => {
     // Check if any required field is empty
@@ -46,28 +50,31 @@ const Registration = () => {
       if (!password) seterrorpass(true);
       if (!email) seterroremail(true);
       if (!cpassword) setError("Passwords don't match");
-      return; 
+      // if (!name) {
+      //   Toast('Name Cannot to )
+      // }
+      return;
     } else {
       seterrname(false);
       seterrorpass(false);
       seterroremail(false);
       setError('');
     }
-  
+
     try {
       const result = await axios.post(`/api/v1/register`, {
         name: name,
         password: password,
-        email: email
+        email: email,
       });
-  
+
       setload(false);
-      navigation.navigate("Login");
-      setname("");
-      setemail("");
-      setpassword("");
-      setcpassword("");
-      seterrormsg("");
+      navigation.navigate('Login');
+      setname('');
+      setemail('');
+      setpassword('');
+      setcpassword('');
+      seterrormsg('');
       console.log(result, 'login data');
       Toast();
     } catch (error) {
@@ -78,9 +85,8 @@ const Registration = () => {
       console.log(error);
     }
   };
-  
 
-  const handlePasswordChange = (value) => {
+  const handlePasswordChange = value => {
     setpassword(value);
     if (value !== cpassword) {
       setError("Passwords don't match");
@@ -89,7 +95,7 @@ const Registration = () => {
     }
   };
 
-  const handleCPasswordChange = (value) => {
+  const handleCPasswordChange = value => {
     setcpassword(value);
     if (password !== value) {
       setError("Passwords don't match");
@@ -97,65 +103,92 @@ const Registration = () => {
       setError('');
     }
   };
-
-  const Toast = () => {
+  //'User added successfully !!'
+  const Toast = message => {
     ToastAndroid.showWithGravityAndOffset(
       'User added successfully !!',
       ToastAndroid.LONG,
       ToastAndroid.BOTTOM,
       25,
       50,
-
     );
   };
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: "520887205481-rjaiisq7vmkqtpqhnqepopo2aupdp3a3.apps.googleusercontent.com",
-      androidClientId: "520887205481-d9h83i54r4d9brbg33ts8qh0mmdj19ur.apps.googleusercontent.com",
+      webClientId:
+        '520887205481-rjaiisq7vmkqtpqhnqepopo2aupdp3a3.apps.googleusercontent.com',
+      androidClientId:
+        '520887205481-d9h83i54r4d9brbg33ts8qh0mmdj19ur.apps.googleusercontent.com',
       scopes: ['profile', 'email'],
       offlineAccess: true,
-      scopes: ['profile', 'email']
+      scopes: ['profile', 'email'],
     });
   }, []);
 
-  
   return (
-    <ScrollView style={{ flex: 1, }}>
+    <ScrollView style={{flex: 1}}>
       <StatusBar
         animated={true}
         backgroundColor="#000"
         barStyle={statusBarStyle}
       />
 
-
-      <View style={{ alignItems: "center", height: windowHeight, backgroundColor: "#000" }}>
+      <View
+        style={{
+          alignItems: 'center',
+          height: windowHeight,
+          backgroundColor: '#000',
+        }}>
         <Image
           source={require('../assets/one.jpg')}
           style={{
             height: 200,
             width: 200,
-
           }}
-        // resizeMode="stretch"
+          // resizeMode="stretch"
         />
-
       </View>
-      <View style={{ backgroundColor: "#fff", borderTopRightRadius: 50, position: "absolute", bottom: 0, width: "100%" }}>
-
-        <View style={{ width: "100%", marginTop: 10, alignItems: "center" }}>
-          <Text style={{ color: "#000", fontSize: responsiveFontSize(4), fontWeight: "500" }}>Registration</Text>
-          <Text style={{ color: "#D9D9D9", fontSize: responsiveFontSize(1.86), fontWeight: "500" }}>
+      <View
+        style={{
+          backgroundColor: '#fff',
+          borderTopRightRadius: 50,
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+        }}>
+        <View style={{width: '100%', marginTop: 10, alignItems: 'center'}}>
+          <Text
+            style={{
+              color: '#000',
+              fontSize: responsiveFontSize(4),
+              fontWeight: '500',
+            }}>
+            Registration
+          </Text>
+          <Text
+            style={{
+              color: '#D9D9D9',
+              fontSize: responsiveFontSize(1.86),
+              fontWeight: '500',
+            }}>
             Sign up to continue
           </Text>
         </View>
 
-        <View style={{ width: "100%", }}>
-          <View style={{ paddingHorizontal: 12, paddingTop: 10 }}>
-            <Text style={{ color: "#000", fontSize: responsiveFontSize(1.86), fontWeight: "600" }}>Name</Text>
+        <View style={{width: '100%'}}>
+          <View style={{paddingHorizontal: 12, paddingTop: 10}}>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: responsiveFontSize(1.86),
+                fontWeight: '600',
+              }}>
+              Name
+            </Text>
           </View>
 
-          <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
+          <View style={{paddingHorizontal: 10, paddingTop: 10}}>
             <TextInput
               placeholder="Enter Your name"
               onChangeText={value => setname(value)}
@@ -166,14 +199,20 @@ const Registration = () => {
                 color: '#000',
                 fontWeight: '300',
                 paddingLeft: 8,
-                backgroundColor: "#D9D9D9",
+                backgroundColor: '#D9D9D9',
                 // backgroundColor:"red",
-                width: "100%",
-                borderRadius: 10
+                width: '100%',
+                borderRadius: 10,
               }}
             />
             {errname && errname ? (
-              <Text style={{ color: 'red', fontSize: responsiveFontSize(1.5), paddingLeft: 0, paddingTop: 5 }}>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: responsiveFontSize(1.5),
+                  paddingLeft: 0,
+                  paddingTop: 5,
+                }}>
                 name is not allowed to be empty
               </Text>
             ) : (
@@ -182,13 +221,19 @@ const Registration = () => {
           </View>
         </View>
 
-
-        <View style={{ width: "100%", }}>
-          <View style={{ paddingHorizontal: 12, paddingTop: 6 }}>
-            <Text style={{ color: "#000", fontSize: responsiveFontSize(1.86), fontWeight: "600" }}>Email Id</Text>
+        <View style={{width: '100%'}}>
+          <View style={{paddingHorizontal: 12, paddingTop: 6}}>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: responsiveFontSize(1.86),
+                fontWeight: '600',
+              }}>
+              Email Id
+            </Text>
           </View>
 
-          <View style={{ paddingHorizontal: 10, paddingTop: 6 }}>
+          <View style={{paddingHorizontal: 10, paddingTop: 6}}>
             <TextInput
               placeholder="Enter Your Email Id"
               // maxLength={10}
@@ -202,23 +247,35 @@ const Registration = () => {
                 color: '#000',
                 fontWeight: '300',
                 paddingLeft: 8,
-                backgroundColor: "#D9D9D9",
+                backgroundColor: '#D9D9D9',
                 // backgroundColor:"red",
-                width: "100%",
-                borderRadius: 10
+                width: '100%',
+                borderRadius: 10,
               }}
             />
-               {erroremail && erroremail ? (
-              <Text style={{ color: 'red', fontSize: responsiveFontSize(1.5), paddingLeft: 0, paddingTop: 5 }}>
+            {erroremail && erroremail ? (
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: responsiveFontSize(1.5),
+                  paddingLeft: 0,
+                  paddingTop: 5,
+                }}>
                 Email is not allowed to be empty
               </Text>
             ) : (
               ''
             )}
-         
-             {errormsg && errormsg ? (
-              <Text style={{ color: 'red', fontSize: responsiveFontSize(1.5), paddingLeft: 0, paddingTop: 5 }}>
-               {errormsg && errormsg}
+
+            {errormsg && errormsg ? (
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: responsiveFontSize(1.5),
+                  paddingLeft: 0,
+                  paddingTop: 5,
+                }}>
+                {errormsg && errormsg}
               </Text>
             ) : (
               ''
@@ -233,23 +290,27 @@ const Registration = () => {
           </View>
         </View>
 
-        <View style={{ width: "100%", marginTop: 5 }}>
-          <View style={{ paddingHorizontal: 12, }}>
-            <Text style={{ color: "#000", fontSize: responsiveFontSize(1.86), fontWeight: "600" }}>Password</Text>
+        <View style={{width: '100%', marginTop: 5}}>
+          <View style={{paddingHorizontal: 12}}>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: responsiveFontSize(1.86),
+                fontWeight: '600',
+              }}>
+              Password
+            </Text>
           </View>
-          <View style={{ paddingHorizontal: 10, marginTop: 6 }}>
+          <View style={{paddingHorizontal: 10, marginTop: 6}}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: "#D9D9D9",
-                width: "100%",
+                backgroundColor: '#D9D9D9',
+                width: '100%',
                 borderRadius: 10,
-
-
               }}>
-
-              <View style={{ width: "90%", borderRadius: 10 }}>
+              <View style={{width: '90%', borderRadius: 10}}>
                 <TextInput
                   placeholder="Enter Your Password"
                   value={password}
@@ -268,7 +329,7 @@ const Registration = () => {
                 />
               </View>
 
-              <View style={{ position: 'absolute', right: 5 }}>
+              <View style={{position: 'absolute', right: 5}}>
                 <Icon
                   name={data ? 'eye' : 'eye-off'}
                   onPress={() => setdata(!data)}
@@ -286,37 +347,43 @@ const Registration = () => {
               </View>
             </View>
             {errorpass && errorpass ? (
-              <Text style={{ color: 'red', fontSize: responsiveFontSize(1.5), paddingLeft: 0, paddingTop: 5 }}>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: responsiveFontSize(1.5),
+                  paddingLeft: 0,
+                  paddingTop: 5,
+                }}>
                 password is not allowed to be empty
               </Text>
             ) : (
               ''
             )}
-
           </View>
-
-
-   
-
         </View>
 
-        <View style={{ width: "100%", marginTop: 5 }}>
-          <View style={{ paddingHorizontal: 12, }}>
-            <Text style={{ color: "#000", fontSize: responsiveFontSize(1.86), fontWeight: "600" }}> Confirm Password</Text>
+        <View style={{width: '100%', marginTop: 5}}>
+          <View style={{paddingHorizontal: 12}}>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: responsiveFontSize(1.86),
+                fontWeight: '600',
+              }}>
+              {' '}
+              Confirm Password
+            </Text>
           </View>
-          <View style={{ paddingHorizontal: 10, marginTop: 6 }}>
+          <View style={{paddingHorizontal: 10, marginTop: 6}}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: "#D9D9D9",
-                width: "100%",
+                backgroundColor: '#D9D9D9',
+                width: '100%',
                 borderRadius: 10,
-
-
               }}>
-
-              <View style={{ width: "90%", borderRadius: 10 }}>
+              <View style={{width: '90%', borderRadius: 10}}>
                 <TextInput
                   placeholder="Enter Your confirm Password"
                   value={cpassword}
@@ -335,7 +402,7 @@ const Registration = () => {
                 />
               </View>
 
-              <View style={{ position: 'absolute', right: 5 }}>
+              <View style={{position: 'absolute', right: 5}}>
                 <Icon
                   name={data1 ? 'eye' : 'eye-off'}
                   onPress={() => setdata1(!data1)}
@@ -352,11 +419,18 @@ const Registration = () => {
                 />
               </View>
             </View>
-
           </View>
           {password && cpassword && error ? (
-        <Text style={{ color: 'red', fontSize: 14, paddingHorizontal: 12, marginTop: 5 }}>{error}</Text>
-      ) : null}
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 14,
+                paddingHorizontal: 12,
+                marginTop: 5,
+              }}>
+              {error}
+            </Text>
+          ) : null}
 
           {/* {
             error && error ?
@@ -365,10 +439,9 @@ const Registration = () => {
               </Text>
               : ""
           } */}
-
         </View>
 
-        <View style={{ paddingHorizontal: 10, marginTop: 10 }}>
+        <View style={{paddingHorizontal: 10, marginTop: 10}}>
           <TouchableOpacity
             // onPress={() => handleSubmit()}
             onPress={() => {
@@ -376,72 +449,82 @@ const Registration = () => {
                 handleSubmit();
               }
             }}
-
-            style={{ backgroundColor: '#000', width: "100%", alignItems: "center", borderRadius: 10 }}>
-            {
-              load && load ?
-                <ActivityIndicator
-                  style={{
-                    fontSize: responsiveFontSize(2.2),
-                    paddingVertical: 10,
-                  }}
-                  size="small" color="#fff"
-
-                />
-                :
-                <Text style={{
+            style={{
+              backgroundColor: '#000',
+              width: '100%',
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+            {load && load ? (
+              <ActivityIndicator
+                style={{
+                  fontSize: responsiveFontSize(2.2),
+                  paddingVertical: 10,
+                }}
+                size="small"
+                color="#fff"
+              />
+            ) : (
+              <Text
+                style={{
                   color: '#fff',
                   fontSize: responsiveFontSize(2.2),
                   paddingVertical: 10,
-                  fontWeight: "500"
+                  fontWeight: '500',
                 }}>
-                  Registration
-                </Text>
-
-            }
+                Registration
+              </Text>
+            )}
           </TouchableOpacity>
 
+          {/* google */}
 
-           {/* google */}
-
-           <View style={{
-            marginHorizontal: 80,
-          }}>
+          <View
+            style={{
+              marginHorizontal: 80,
+            }}>
             <GoogleSigninButton
-              style={{ width: 192, height: 48 }}
+              style={{width: 192, height: 48}}
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Dark}
-              hideLogo={true} 
+              hideLogo={true}
             />
           </View>
 
-
           <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => navigation.navigate('Login')}
             // onPress={() =>handleSubmit()}
-            style={{ flexDirection: "row", justifyContent: "center", paddingTop: responsiveHeight(2), alignItems: "center" }}>
-            <Text style={{ fontSize: responsiveFontSize(1.6), color: "#000" }}>Already have account ?</Text>
-            <Text style={{
-              color: '#000',
-              fontSize: responsiveFontSize(1.4),
-              paddingLeft: 5,
-              backgroundColor: "#D9D9D9",
-              paddingHorizontal: 7,
-              marginLeft: 4,
-              borderRadius: 10,
-              paddingVertical: 4
-            }}>SIGN IN HERE</Text>
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              paddingTop: responsiveHeight(2),
+              alignItems: 'center',
+            }}>
+            <Text style={{fontSize: responsiveFontSize(1.6), color: '#000'}}>
+              Already have account ?
+            </Text>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: responsiveFontSize(1.4),
+                paddingLeft: 5,
+                backgroundColor: '#D9D9D9',
+                paddingHorizontal: 7,
+                marginLeft: 4,
+                borderRadius: 10,
+                paddingVertical: 4,
+              }}>
+              SIGN IN HERE
+            </Text>
           </TouchableOpacity>
-
         </View>
 
-
-        <View style={{ paddingBottom: 14 }}></View>
+        <View style={{paddingBottom: 14}}></View>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Registration
+export default Registration;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

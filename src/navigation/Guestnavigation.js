@@ -25,6 +25,8 @@ import PodcastDetailsVideo from '../Screen/PodcastDetailsVideo';
 import SplashScreen from './SplashScreen';
 import matchesdetailVideo from '../Screen/matchesdetailVideo';
 import Explorereels from '../Screen/Explorereels';
+import GroupChat from '../Screen/GroupChat';
+import GroupMember from '../Screen/GroupMember';
 const Guestnavigation = () => {
   const Stack = createNativeStackNavigator();
   const currentUser = useSelector(state => state.app.currentUser);
@@ -66,6 +68,7 @@ const Guestnavigation = () => {
         name="PodcastDetailsVideo"
         component={PodcastDetailsVideo}
       />
+      <Stack.Screen name="GroupChat" component={GroupChat} />
       <Stack.Screen name="StartPage" component={StartPage} />
       <Stack.Screen name="Explorereels" component={Explorereels} />
       <Stack.Screen name="matchesdetailVideo" component={matchesdetailVideo} />
@@ -81,6 +84,7 @@ const Guestnavigation = () => {
       <Stack.Screen name="PodcastViewPage" component={PodcastViewPage} />
       <Stack.Screen name="UserProfiledetails" component={UserProfiledetails} />
       <Stack.Screen name="Connect" component={Connect} />
+      <Stack.Screen name="GroupMember" component={GroupMember} />
     </Stack.Navigator>
   );
 };

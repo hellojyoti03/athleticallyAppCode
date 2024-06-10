@@ -29,7 +29,7 @@ const StackNavigator = () => {
         let {error, user, token} = await getAsyncStorage();
 
         if (auth && !error) {
-          console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+          //console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
           dispatch(setCurrentUser(user));
           dispatch(setUserToken(token));
         }

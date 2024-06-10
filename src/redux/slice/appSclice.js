@@ -4,6 +4,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   currentUser: null,
   userToken: null,
+  groupChatMessage: [],
   contactGroup: [],
 };
 
@@ -11,8 +12,10 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    setGroupChatMessage(state, action) {
+      state.groupChatMessage = action.payload;
+    },
     setUserToken(state, action) {
-      console.log('setr action ac', action.payload);
       state.userToken = action.payload;
     },
     deleteUserToken(state) {
@@ -27,7 +30,12 @@ const appSlice = createSlice({
   },
 });
 
-export const {setUserToken, deleteUserToken, setCurrentUser, setContactGroup} =
-  appSlice.actions;
+export const {
+  setUserToken,
+  deleteUserToken,
+  setCurrentUser,
+  setContactGroup,
+  setGroupChatMessage,
+} = appSlice.actions;
 
 export default appSlice.reducer;
