@@ -25,7 +25,7 @@ const setAsyncStorage = async ({token, email, password, user}) => {
       AsyncStorage.setItem('athletically_user', JSON.stringify(user)),
       setAuthorizationHeader(token),
     ]);
-    console.log('set all data to native storage');
+    // console.log('set all data to native storage');
 
     return Promise.resolve();
   } catch (error) {
@@ -40,7 +40,7 @@ const getAsyncStorage = async () => {
     let email = await AsyncStorage.getItem('athletically_email');
     let password = await AsyncStorage.getItem('athletically_password');
     let user = await AsyncStorage.getItem('athletically_user');
-    console.log(user, token, email, password, 'current user activity');
+    // console.log(user, token, email, password, 'current user activity');
     if (!token || !email || !password || !user) {
       throw new Error('Key Not Found');
     }
@@ -71,6 +71,7 @@ const autoLogin = async () => {
     if (error) {
       throw new Error('getAsyncStorage Error');
     }
+    //console.time();
     let response = await logIn(email, password);
 
     await setAsyncStorage({
@@ -90,8 +91,22 @@ const autoLogin = async () => {
       console.error('Error setting up the request:', error.message);
     }
 
-    console.log(error);
+    console.log(error, 'Auto Log In Erroor');
   }
   return false;
 };
-export {setAuthorizationHeader, setAsyncStorage, getAsyncStorage, autoLogin};
+
+const isNumber = value => {
+  let isNumber = !isNaN(value);
+  if (!isNumber || typeof value !== 'string' || value.trim() === '') {
+    return false;
+  }
+  return true;
+};
+export {
+  setAuthorizationHeader,
+  setAsyncStorage,
+  getAsyncStorage,
+  autoLogin,
+  isNumber,
+};

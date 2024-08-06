@@ -10,12 +10,24 @@ const GET_USER_GROUP_CONNECT = `${BASE_URI}/get-user-groups-connect`;
 const GET_PREVIOUS_CHAT_BY_GROUP_ID = `${BASE_URI}/get-previous-chats`;
 const GET_USERS_BY_GROUP_ID = `${BASE_URI}/get-users-of-group`;
 export const logIn = (email, password) => {
-  console.log(email, password);
   return axios.post(
     LOGIN,
     {
       email: email,
       password: password,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+};
+export const signInWithGoogle = user => {
+  return axios.post(
+    LOGIN,
+    {
+      ...user,
     },
     {
       headers: {

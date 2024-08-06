@@ -35,7 +35,7 @@ const Guestnavigation = () => {
     const backAction = () => {
       AsyncStorage.getItem('updated').then(updated => {
         // If updated is true, navigate to DashboardPage
-        if (updated === 'true') {
+        if (updated === 'false') {
           navigation.navigate('DashboardPage');
           return true; // Prevent default back button behavior
         }
@@ -52,10 +52,11 @@ const Guestnavigation = () => {
     // Clean up event listener
     return () => backHandler.remove();
   }, []);
+
   return (
     <Stack.Navigator
       initialRouteName={
-        currentUser?.updated === true ? 'DashboardPage' : 'StartPage'
+        currentUser?.updated === false ? 'DashboardPage' : 'StartPage'
       }
       screenOptions={{
         headerShown: false,

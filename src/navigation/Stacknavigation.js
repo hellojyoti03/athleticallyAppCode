@@ -27,16 +27,20 @@ const StackNavigator = () => {
       try {
         let auth = await autoLogin();
         let {error, user, token} = await getAsyncStorage();
-
+        // console.log(error, user, token, auth, 'current user');
         if (auth && !error) {
           //console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
           dispatch(setCurrentUser(user));
           dispatch(setUserToken(token));
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Guestnavigation'}],
+          });
         }
 
         setLoding(false);
       } catch (e) {
-        console.error('Error:: Auto log in error');
+        //console.error('Error:: Auto log in error');
         setLoding(false);
       }
     };
@@ -44,7 +48,7 @@ const StackNavigator = () => {
     userAuth();
 
     return () => {};
-  }, []);
+  }, [dispatch]);
 
   if (loading) {
     return (

@@ -9,7 +9,7 @@ const ENV_TYPE = {
 
 /* ============== SET APP CONFIG =============================*/
 config.apiBaseUrl = {
-  development: 'http://15.206.27.50:3009',
+  development: 'http://15.206.66.165:3009',
   //development: 'http://localhost:50547',
   staging: 'http://staging.example.com',
   production: 'http://production.example.com',

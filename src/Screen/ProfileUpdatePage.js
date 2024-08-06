@@ -10,6 +10,8 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  SafeAreaView,
+  BackHandler,
 } from 'react-native';
 import React, {useRef, useState, useEffect} from 'react';
 import Video from 'react-native-video';
@@ -27,13 +29,13 @@ import axios from 'axios';
 import Followers from 'react-native-vector-icons/dist/FontAwesome5';
 import SettingsIcon from 'react-native-vector-icons/dist/Feather';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {useSelector} from 'react-redux';
+import {useSelector, useStore} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const deviceheight = Dimensions.get('window').height;
 const devicewidth = Dimensions.get('window').width;
 const ProfileUpdatePage = ({route}) => {
   const navigation = useNavigation();
-  console.log('routeroute', route);
+  //console.log('routeroute', route);
   const [name, setname] = useState('');
   const [teamsize, setteamsize] = useState('');
   const [homeground, sethomeground] = useState('');
@@ -74,7 +76,7 @@ const ProfileUpdatePage = ({route}) => {
   const [description, setdescription] = useState('');
   const [organizationtype, setorganizationtype] = useState('');
   const [keyPersonalities, setKeyPersonalities] = useState([]);
-
+  const [checkProfileUpdate, setCheckProfileUpdated] = useState(false);
   const handleKeyPersonalitiesInputChange = (text, field, index) => {
     const updatedKeyPersonalities = [...keyPersonalities];
     updatedKeyPersonalities[index][field] = text.trim() !== '' ? text : null;
@@ -86,7 +88,7 @@ const ProfileUpdatePage = ({route}) => {
       setload(true);
       let mr = await AsyncStorage.getItem('usertoken');
       const modifiedUser = JSON.parse(mr);
-      console.log(modifiedUser, 'modified User');
+      console.log(modifiedUser, 'modified user');
 
       axios.defaults.headers.common[
         'Authorization'
@@ -98,6 +100,10 @@ const ProfileUpdatePage = ({route}) => {
 
       if (response.data.err == false) {
         setload(false);
+        if (modifiedUser?.updated) {
+          setCheckProfileUpdated(true);
+        }
+
         setKeyPersonalities(response.data.data.key_personalities);
         setprofiledataget(response.data.data);
         setMedals(response.data.data?.medals || []);
@@ -123,7 +129,6 @@ const ProfileUpdatePage = ({route}) => {
 
         // setawards(response.data.data?.competition_won || []);
       }
-      console.log('Profile Data:', response);
     } catch (error) {
       setload(false);
       console.error('Error fetching data:', error);
@@ -140,7 +145,7 @@ const ProfileUpdatePage = ({route}) => {
       ] = `Bearer ${modifiedUser?.token}`;
       const response = await axios.get(`/api/v1/get-org-types`);
       setorganizationtype(response.data.data);
-      console.log('otganizationtype', response);
+      //console.log('otganizationtype', response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -226,7 +231,7 @@ const ProfileUpdatePage = ({route}) => {
     try {
       let mr = await AsyncStorage.getItem('usertoken');
       const modifiedUser = JSON.parse(mr);
-      console.log('modifiedUserrrrr', modifiedUser);
+      // console.log('modifiedUserrrrr', modifiedUser);
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${modifiedUser?.token}`;
@@ -234,7 +239,7 @@ const ProfileUpdatePage = ({route}) => {
         reel_id: '65749417625a8953a6ca920d',
       });
       setdata(response.data.data);
-      console.log('response', response);
+      //console.log('response', response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -244,13 +249,13 @@ const ProfileUpdatePage = ({route}) => {
     try {
       let mr = await AsyncStorage.getItem('usertoken');
       const modifiedUser = JSON.parse(mr);
-      console.log('modifiedUserrrrr', modifiedUser);
+      //console.log('modifiedUserrrrr', modifiedUser);
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${modifiedUser?.token}`;
       const response = await axios.get('/api/v1/get-game-list');
       setGamedata(response.data.data);
-      console.log('getgame', response);
+      // console.log('getgame', response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -260,7 +265,7 @@ const ProfileUpdatePage = ({route}) => {
     try {
       let mr = await AsyncStorage.getItem('usertoken');
       const modifiedUser = JSON.parse(mr);
-      console.log('modifiedUserrrrr', modifiedUser);
+      //console.log('modifiedUserrrrr', modifiedUser);
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${modifiedUser?.token}`;
@@ -272,7 +277,7 @@ const ProfileUpdatePage = ({route}) => {
         },
       );
       setgetpositiondata(response.data.data);
-      console.log('getposition', response);
+      // console.log('getposition', response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -293,9 +298,8 @@ const ProfileUpdatePage = ({route}) => {
       ] = `Bearer ${modifiedUser?.token}`;
       const response = await axios.get(`/api/v1/get-types-list`);
       setpersonilitydropdown(response.data.data.types);
-      console.log('setpersonilitydropdown', response.data.data.types);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
   };
 
@@ -311,6 +315,25 @@ const ProfileUpdatePage = ({route}) => {
     }
   }, [route]);
 
+  useEffect(() => {
+    const backAction = () => {
+      AsyncStorage.getItem('usertoken').then(mr => {
+        const modifiedUser = JSON.parse(mr);
+        if (route?.params?.data && modifiedUser.updated) {
+          return true;
+        }
+        return false;
+      });
+    };
+    // Add event listener for back button press
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    // Clean up event listener
+    return () => backHandler.remove();
+  }, []);
   useEffect(() => {
     getgame();
   }, []);
@@ -353,15 +376,13 @@ const ProfileUpdatePage = ({route}) => {
     const fetchAsyncStorageValue = async () => {
       try {
         const mr = await AsyncStorage.getItem('usertoken');
-        console.log('mr:', mr);
+
         if (mr !== null) {
           const modifiedUser = JSON.parse(mr);
-          console.log('modifiedUser:', modifiedUser);
 
           if (modifiedUser?.user_type) {
             setstoragetypesave(modifiedUser.user_type);
             // setstoragee(modifiedUser.user_type);
-            console.log('User type:', modifiedUser.user_type);
           } else {
             console.log('No user type found in modifiedUser');
           }
@@ -422,10 +443,8 @@ const ProfileUpdatePage = ({route}) => {
     );
   };
 
-  console.log('mol', typeof (teamsize && teamsize));
-
   return (
-    <View style={{flex: 1, backgroundColor: '#000'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#000'}}>
       <StatusBar
         animated={true}
         backgroundColor="#000"
@@ -867,7 +886,7 @@ const ProfileUpdatePage = ({route}) => {
                       if (selectedGame) {
                         const selectedGameId = selectedGame._id;
                         setpositionid(selectedGameId);
-                        console.log('lllll', selectedItem, selectedGameId);
+                        // console.log('lllll', selectedItem, selectedGameId);
                       }
                     }}
                     buttonTextAfterSelection={(selectedItem, index) =>
@@ -1283,7 +1302,7 @@ const ProfileUpdatePage = ({route}) => {
                         const selectedGameId = selectedGame._id;
                         setposition(selectedGameId);
                         getpostion(selectedGameId);
-                        console.log('lllll', selectedItem, selectedGameId);
+                        // console.log('lllll', selectedItem, selectedGameId);
                       }
                     }}
                     buttonTextAfterSelection={(selectedItem, index) =>
@@ -1313,7 +1332,7 @@ const ProfileUpdatePage = ({route}) => {
                         const selectedGameId = selectedGame._id;
                         setposition(selectedGameId);
                         getpostion(selectedGameId);
-                        console.log('lllll', selectedItem, selectedGameId);
+                        // console.log('lllll', selectedItem, selectedGameId);
                       }
                     }}
                     buttonTextAfterSelection={(selectedItem, index) =>
@@ -1799,7 +1818,7 @@ const ProfileUpdatePage = ({route}) => {
                         const selectedGameId = selectedGame._id;
                         setposition(selectedGameId);
                         getpostion(selectedGameId);
-                        console.log('lllll', selectedItem, selectedGameId);
+                        //console.log('lllll', selectedItem, selectedGameId);
                       }
                     }}
                     buttonTextAfterSelection={(selectedItem, index) =>
@@ -2501,7 +2520,7 @@ const ProfileUpdatePage = ({route}) => {
         </View>
       )}
       {/* <TabBar /> */}
-    </View>
+    </SafeAreaView>
   );
 };
 

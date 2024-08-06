@@ -265,9 +265,11 @@ const DashboardPage = ({route}) => {
             style={{
               width: devicewidth / 4 - 20,
               height: deviceheight / 4,
+
               backgroundColor: '#52d3d8',
+
               marginHorizontal: 10,
-              borderRadius: 10,
+              // borderRadius: 10,
               justifyContent: 'center',
             }}>
             <Text
@@ -288,7 +290,7 @@ const DashboardPage = ({route}) => {
               height: deviceheight / 4,
               backgroundColor: '#13f017',
               marginHorizontal: 10,
-              borderRadius: 10,
+              // borderRadius: 10,
               justifyContent: 'center',
             }}>
             <Text
@@ -309,14 +311,14 @@ const DashboardPage = ({route}) => {
               height: deviceheight / 4,
               backgroundColor: '#fff',
               marginHorizontal: 10,
-              borderRadius: 10,
+              // borderRadius: 10,
               justifyContent: 'center',
             }}>
             <Text
               style={{
                 transform: [{rotate: '-90deg'}],
                 color: '#000',
-                fontSize: responsiveFontSize(2),
+                fontSize: responsiveFontSize(1.31),
                 fontWeight: '600',
               }}>
               LEADER BOARD
@@ -330,7 +332,7 @@ const DashboardPage = ({route}) => {
               height: deviceheight / 4,
               backgroundColor: '#424242',
               marginHorizontal: 10,
-              borderRadius: 10,
+              //borderRadius: 10,
               justifyContent: 'center',
             }}>
             <Text
