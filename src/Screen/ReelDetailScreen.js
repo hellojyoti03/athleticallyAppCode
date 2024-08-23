@@ -91,9 +91,9 @@ const ReelDetailScreen = ({route}) => {
         liked_by: route.params.user,
         reel_id: currentreelid && currentreelid,
       });
-      // console.log('response', response);
+      console.log('response', response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data Like:', error.message);
     }
   };
 
@@ -153,7 +153,7 @@ const ReelDetailScreen = ({route}) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
-          // console.log('itemitemitem', item)
+          console.log('itemitemitem', item);
           return (
             <View
               style={{
@@ -229,7 +229,14 @@ const ReelDetailScreen = ({route}) => {
                   <TouchableOpacity
                     onPress={() => likeSubmit()}
                     style={{bottom: 85, alignItems: 'center'}}>
-                    <Likee name="like1" style={{color: '#fff', fontSize: 25}} />
+                    <Likee
+                      name="like1"
+                      style={{
+                        color: 'red',
+
+                        fontSize: 25,
+                      }}
+                    />
                     <Text style={{color: 'red', fontSize: 15}}>
                       {item.likes}
                     </Text>
@@ -280,6 +287,15 @@ const ReelDetailScreen = ({route}) => {
         }}
         pagingEnabled
         initialScrollIndex={currentVideoIndex && currentVideoIndex}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            flatListRef.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
       />
       {/* coment model */}
 

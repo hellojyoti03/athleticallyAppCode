@@ -56,7 +56,7 @@ const Guestnavigation = () => {
   return (
     <Stack.Navigator
       initialRouteName={
-        currentUser?.updated === false ? 'DashboardPage' : 'StartPage'
+        currentUser?.updated === true ? 'DashboardPage' : 'StartPage'
       }
       screenOptions={{
         headerShown: false,

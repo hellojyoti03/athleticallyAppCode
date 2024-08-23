@@ -122,7 +122,7 @@ const StartPage = () => {
                 style={{
                   color: '#38485c',
                   // paddingLeft: 2,
-                  fontSize: responsiveFontSize(1.9),
+                  fontSize: responsiveFontSize(2),
                 }}>
                 Skip
               </Text>

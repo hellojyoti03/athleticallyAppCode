@@ -19,6 +19,7 @@ import Notificationss from 'react-native-vector-icons/MaterialIcons';
 import SelectDropdown from 'react-native-select-dropdown';
 const {width, height} = Dimensions.get('window');
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import TabBar from '../common/TabBar';
 import {
   responsiveHeight,
   responsiveWidth,
@@ -2516,10 +2517,10 @@ const ProfileUpdatePage = ({route}) => {
               </View>
             </ScrollView>
           )}
-          <View style={{height: 40}}></View>
+          <View style={{height: 50}}></View>
         </View>
       )}
-      {/* <TabBar /> */}
+      <TabBar />
     </SafeAreaView>
   );
 };

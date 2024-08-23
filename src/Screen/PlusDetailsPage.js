@@ -6,6 +6,7 @@ import {
   StatusBar,
   Dimensions,
   TextInput,
+  PermissionsAndroid,
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -16,6 +17,7 @@ import Notificationss from 'react-native-vector-icons/MaterialIcons';
 import Cameraaaa from 'react-native-vector-icons/Entypo';
 const {width, height} = Dimensions.get('window');
 import axios from 'axios';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import {
   responsiveHeight,
@@ -61,16 +63,87 @@ const PlusDetailsPage = ({route}) => {
       console.error('Error:', error);
     }
   };
-  const handdlechange = () => {
-    const options = {
-      mediaType: 'video',
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response?.assets) console.log(response, 'jdkas');
-      setVideoUri(response?.assets[0]);
-      // setVideoUri(response.assets[0].uri);
-    });
+  const [mediaType, setMediaType] = useState(null);
+  async function requestPermissions() {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      ]);
+      return (
+        granted['android.permission.CAMERA'] ===
+          PermissionsAndroid.RESULTS.GRANTED &&
+        granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+          PermissionsAndroid.RESULTS.GRANTED
+      );
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  }
+  // const handdlechange = () => {
+  //   const options = {
+  //     mediaType: 'video',
+  //     quality: 1,
+  //   };
+  //   launchCamera(options, response => {
+  //     console.log(response);
+  //     if (response.didCancel) {
+  //       console.log('User cancelled video picker');
+  //       // Handle user cancellation
+  //     } else if (response.errorCode) {
+  //       console.log('ImagePicker Error: ', response.errorCode);
+  //       // Handle any errors
+  //     } else if (response.errorMessage) {
+  //       console.log('Error Message: ', response.errorMessage);
+  //       // Handle any error messages
+  //     } else if (response?.assets) {
+  //       console.log(response, 'Video response');
+  //       setVideoUri(response.assets[0].uri);
+  //     }
+  //   });
+
+  //   // ImagePicker.openCamera({
+  //   //   mediaType: 'any', // This allows both image and video capture
+  //   // })
+  //   //   .then(media => {
+  //   //     console.log(media);
+  //   //     setMediaUri(media.path);
+  //   //     setMediaType(media.mime.startsWith('video') ? 'video' : 'image');
+  //   //   })
+  //   //   .catch(error => {
+  //   //     if (error.code === 'E_PICKER_CANCELLED') {
+  //   //       console.log('User cancelled media picker');
+  //   //     } else {
+  //   //       console.error('ImagePicker Error: ', error);
+  //   //     }
+  //   //   });
+  // };
+  const handdlechange = async () => {
+    try {
+      const options = {
+        mediaType: 'video',
+        quality: 1,
+      };
+      const hasPermission = await requestPermissions();
+      if (hasPermission) {
+        launchCamera(options, response => {
+          if (response.didCancel) {
+            console.log('User cancelled video picker');
+          } else if (response.errorCode) {
+            console.error('ImagePicker Error Code: ', response.errorCode);
+          } else if (response.errorMessage) {
+            console.error('ImagePicker Error Message: ', response.errorMessage);
+          } else if (response?.assets) {
+            setVideoUri(response.assets[0].uri);
+          }
+        });
+      } else {
+        console.log('Permissions not granted');
+      }
+    } catch (error) {
+      console.error('Error launching camera: ', error);
+    }
   };
 
   return (

@@ -62,9 +62,9 @@
 //     ] = `Bearer ${modifiedUser?.token}`;
 //     const response = await axios.get(
 //       '/api/v1/get-videos',
-//       { params: { 
+//       { params: {
 //         user_id: modifiedUser?.user_id,
-//         type:"podcast"      
+//         type:"podcast"
 //       } }
 //     );
 //     if (response.data.err == false) {
@@ -82,7 +82,6 @@
 //   useEffect(() => {
 //     getPodcast()
 //   }, [])
-  
 
 // const likeSubmit = async () => {
 //     try {
@@ -128,8 +127,6 @@
 //   const onEndReached = () => {
 //     // Handle video end reached
 //   };
-
-
 
 //   useEffect(() => {
 //     const initialIndex = data.findIndex((item) => item._id === String(route.params.data));
@@ -201,8 +198,6 @@
 //                 <Back name="leftcircleo" style={{ color: '#000', fontSize: 25 }} />
 //               </TouchableOpacity>
 
-
-
 //               {/* <View style={{ position: 'absolute', bottom: 20, right: 17 }}> */}
 //               <View style={{
 //                 position: 'absolute',
@@ -254,10 +249,6 @@
 
 //                 </View>
 //               </View>
-
-
-
-        
 
 //             </View>
 //           )
@@ -333,8 +324,19 @@
 
 // export default PodcastDetailsVideo;
 
-import React, { useRef, useState, useEffect } from 'react';
-import { View, FlatList, Dimensions, TouchableOpacity, ActivityIndicator, Text, Image, Share, TextInput, StyleSheet } from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {
+  View,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+  Text,
+  Image,
+  Share,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker'; // Import orientation library
 import axios from 'axios';
@@ -343,20 +345,20 @@ import DisLikee from 'react-native-vector-icons/AntDesign';
 import Messagee from 'react-native-vector-icons/AntDesign';
 import Back from 'react-native-vector-icons/AntDesign';
 import ShareIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
 import Sendd from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PodcastDetailsVideo = ({ route }) => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState("");
-  const [currentreelid, setcurrentreelid] = useState("");
+const PodcastDetailsVideo = ({route}) => {
+  const [currentVideoIndex, setCurrentVideoIndex] = useState('');
+  const [currentreelid, setcurrentreelid] = useState('');
   const flatListRef = useRef(null);
   const [data, setdata] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [commentModel, setcommentModel] = useState(false);
 
   useEffect(() => {
-    Orientation.lockToLandscape(); // Lock to landscape mode when component mounts
+    Orientation.unlockAllOrientations(); // Lock to landscape mode when component mounts
     return () => {
       Orientation.lockToPortrait(); // Unlock orientation when component unmounts
     };
@@ -365,17 +367,17 @@ const PodcastDetailsVideo = ({ route }) => {
   // Your existing code...
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <FlatList
         ref={flatListRef}
         data={data}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => {
+        renderItem={({item, index}) => {
           return (
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               {index === currentVideoIndex && (
                 <Video
-                  source={{ uri: item.reel_link }}
+                  source={{uri: item.reel_link}}
                   style={styles.video}
                   resizeMode="contain"
                   repeat={false}
@@ -390,7 +392,7 @@ const PodcastDetailsVideo = ({ route }) => {
 
               {/* Your existing code for like, dislike, comment, and share buttons */}
             </View>
-          )
+          );
         }}
         onViewableItemsChanged={onViewableItemsChanged.current}
         viewabilityConfig={{
@@ -406,8 +408,7 @@ const PodcastDetailsVideo = ({ route }) => {
         onBackdropPress={() => setcommentModel(false)}
         onSwipeComplete={() => setcommentModel(false)}
         backdropOpacity={0.5}
-        style={{ justifyContent: 'flex-end', margin: 0 }}
-      >
+        style={{justifyContent: 'flex-end', margin: 0}}>
         {/* Your existing comment modal code */}
       </Modal>
     </View>
@@ -435,14 +436,3 @@ const styles = StyleSheet.create({
 });
 
 export default PodcastDetailsVideo;
-
-
-
-
-
-
-
-
-
-
-

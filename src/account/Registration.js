@@ -605,7 +605,7 @@ const Registration = () => {
               <Text
                 style={{
                   color: '#D9D9D9',
-                  fontSize: responsiveFontSize(1.7),
+                  fontSize: responsiveFontSize(2),
                 }}>
                 Google
               </Text>
@@ -616,7 +616,7 @@ const Registration = () => {
               <Text
                 style={{
                   color: '#D9D9D9',
-                  fontSize: responsiveFontSize(1.7),
+                  fontSize: responsiveFontSize(2),
                 }}>
                 Sign in
               </Text>

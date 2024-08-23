@@ -20,6 +20,7 @@ import Notificationss from 'react-native-vector-icons/MaterialIcons';
 import {getUserGroupsConnect} from '../_request';
 import {setContactGroup} from '../redux/slice/appSclice';
 import {useNavigation} from '@react-navigation/native';
+import TabBar from '../common/TabBar';
 const Connect = () => {
   const dispatch = useDispatch();
   const appState = useSelector(state => state.app);
@@ -151,6 +152,7 @@ const Connect = () => {
           )}
         </ScrollView>
       </View>
+      <TabBar />
     </View>
   );
 };
